@@ -13,11 +13,9 @@ const Contact = () => {
             </h2>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Seeking a 6-month end-of-studies internship starting September 2025 in consulting support, 
-              project management, or digital marketing roles.
+              Seeking for a full time role in consulting support, project management, or digital marketing roles.
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 gap-8">
             <Card className="p-8 shadow-card hover:shadow-elegant transition-all animate-slide-in">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
@@ -80,19 +78,44 @@ const Contact = () => {
               </div>
             </Card>
 
-            <Card className="p-8 shadow-card hover:shadow-elegant transition-all animate-slide-in" style={{ animationDelay: "0.1s" }}>
-              <h3 className="text-2xl font-bold mb-6">Languages</h3>
-              <div className="space-y-4">
-                {languages.map((lang, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-primary" />
-                      <span className="font-medium">{lang.name}</span>
-                    </div>
-                    <span className="text-sm text-muted-foreground">{lang.level}</span>
-                  </div>
-                ))}
-              </div>
+<Card className="p-8 shadow-card hover:shadow-elegant transition-all animate-slide-in" style={{ animationDelay: "0.1s" }}>
+  <h3 className="text-2xl font-bold mb-6">Send a Message</h3>
+  <form 
+    id="contact-form"
+    onSubmit={async (e) => {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const formData = {
+        name: (form.elements.namedItem('name') as HTMLInputElement).value,
+        email: (form.elements.namedItem('email') as HTMLInputElement).value,
+        subject: (form.elements.namedItem('subject') as HTMLInputElement).value,
+        message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+      };
+      
+      try {
+        await fetch('https://script.google.com/macros/s/AKfycbyMj8fOYIVE9WP7qFFiRho-ip2d7PBhGKAlD4a2Wz2eI_O1oZuHuqz15L1B57T_3tA/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        alert('Message sent successfully!');
+        form.reset();
+      } catch (error) {
+        alert('Error sending message. Please try email directly.');
+      }
+    }}
+    className="space-y-4"
+  >
+    <input type="text" name="name" placeholder="Your Name" required className="w-full p-3 rounded-lg bg-secondary border border-border focus:border-primary outline-none transition-all" />
+    <input type="email" name="email" placeholder="Your Email" required className="w-full p-3 rounded-lg bg-secondary border border-border focus:border-primary outline-none transition-all" />
+    <input type="text" name="subject" placeholder="Subject" required className="w-full p-3 rounded-lg bg-secondary border border-border focus:border-primary outline-none transition-all" />
+    <textarea name="message" placeholder="Your Message" rows={5} required className="w-full p-3 rounded-lg bg-secondary border border-border focus:border-primary outline-none transition-all resize-none"></textarea>
+    <button type="submit" className="w-full py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-all shadow-card hover:shadow-elegant">
+      Send Message
+    </button>
+  </form>
+</Card>
 
               <div className="mt-8 p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg border border-primary/20">
                 <p className="text-sm text-muted-foreground">
